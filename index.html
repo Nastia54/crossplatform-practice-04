@@ -13,6 +13,9 @@
     <h1>Моя заметка v2</h1>
     <textarea id="note" rows="8" cols="40"
       placeholder="Введите текст — он сохранится локально"></textarea>
+       <h2>WebAssembly</h2>
+    <button id="wasmBtn">Вычислить квадрат (Wasm)</button>
+    <p>Результат: <span id="result">—</span></p>
   </main>
   <script>
     const area = document.getElementById('note');
@@ -25,6 +28,21 @@
         .then(() => console.log('Service Worker зарегистрирован'))
         .catch(err => console.error('Ошибка регистрации SW:', err));
     }
+        // 3. Загрузка и вызов WebAssembly-модуля
+    let wasmExports = null;
+    fetch('./function.wasm')
+      .then(r => r.arrayBuffer())
+      .then(bytes => WebAssembly.instantiate(bytes))
+      .then(obj => { wasmExports = obj.instance.exports; })
+      .catch(err => console.error('Ошибка загрузки Wasm:', err));
+
+    document.getElementById('wasmBtn').addEventListener('click', () => {
+      if (wasmExports) {
+        document.getElementById('result').textContent = wasmExports.square(7);
+      } else {
+        document.getElementById('result').textContent = 'Модуль ещё не загружен';
+      }
+    });
   </script>
 </body>
 </html>

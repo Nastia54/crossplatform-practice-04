@@ -1,9 +1,10 @@
-const CACHE_NAME = 'pwa-note-v2';
+const CACHE_NAME = 'pwa-note-v3';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon.png'
+  './icon.png',
+  './function.wasm'
 ];
 
 // Событие install: предварительно кэшируем статику
