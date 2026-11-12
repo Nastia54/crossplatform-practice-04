@@ -11,6 +11,7 @@
 <body>
   <main>
     <h1>Моя заметка v2</h1>
+        <button id="installBtn" hidden style="margin: 10px 0; padding: 10px 20px; background: #0d47a1; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Установить приложение</button>
     <textarea id="note" rows="8" cols="40"
       placeholder="Введите текст — он сохранится локально"></textarea>
        <h2>WebAssembly</h2>
@@ -41,6 +42,25 @@
         document.getElementById('result').textContent = wasmExports.square(7);
       } else {
         document.getElementById('result').textContent = 'Модуль ещё не загружен';
+      }
+    });
+        // 4. Кнопка установки приложения (Вариант 1)
+    let deferredPrompt = null;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault(); // Отменяем стандартный баннер браузера
+      deferredPrompt = e; // Сохраняем событие
+      installBtn.hidden = false; // Показываем нашу кнопку
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt(); // Показываем системный диалог установки
+        const choice = await deferredPrompt.userChoice;
+        console.log('Выбор пользователя:', choice.outcome); // 'accepted' или 'dismissed'
+        deferredPrompt = null;
+        installBtn.hidden = true; // Скрываем кнопку после установки
       }
     });
   </script>
