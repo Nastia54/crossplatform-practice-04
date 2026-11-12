@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PWA «Заметка»</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d47a1">
+</head>
+<body>
+  <main>
+    <h1>Моя заметка</h1>
+    <textarea id="note" rows="8" cols="40"
+      placeholder="Введите текст — он сохранится локально"></textarea>
+  </main>
+  <script>
+    const area = document.getElementById('note');
+    area.value = localStorage.getItem('note') || '';
+    area.addEventListener('input', () =>
+      localStorage.setItem('note', area.value));
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker зарегистрирован'))
+        .catch(err => console.error('Ошибка регистрации SW:', err));
+    }
+  </script>
+</body>
+</html>
